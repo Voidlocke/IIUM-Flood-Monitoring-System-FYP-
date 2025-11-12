@@ -9,10 +9,25 @@
 </head>
 <body>
 
-    <a href="{{ route('login') }}"
-    style="padding: 10px 20px; background: #38c172; color: white; text-decoration: none; border-radius: 5px; margin-left: 10px;">
-    🔑 Admin Login
-    </a>
+    @if(Auth::check())
+        @if(Auth::user()->is_admin)
+            <!-- Admin sees a link to admin dashboard instead of login -->
+            <a href="{{ url('/admin/dashboard') }}"
+            style="padding: 10px 20px; background: #38c172; color: white; text-decoration: none; border-radius: 5px; margin-left: 10px;">
+            🛠️ Admin Dashboard
+            </a>
+        @else
+            <!-- Normal logged-in user: you can show nothing or a welcome message -->
+            <span style="margin-left: 10px; color: gray;">Hello, {{ Auth::user()->name }}</span>
+        @endif
+    @else
+        <!-- Guest sees login button -->
+        <a href="{{ route('login') }}"
+        style="padding: 10px 20px; background: #38c172; color: white; text-decoration: none; border-radius: 5px; margin-left: 10px;">
+        🔑 Login
+        </a>
+    @endif
+
 
     <h2>Flood Map</h2>
     <div id="map" style="height: 500px;"></div>
