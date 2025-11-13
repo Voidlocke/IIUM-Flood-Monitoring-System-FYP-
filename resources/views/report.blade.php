@@ -84,7 +84,7 @@
 <div class="container">
     <h2>Report a Flood</h2>
 
-    <form method="POST" action="/report">
+    <form method="POST" action="/report" enctype="multipart/form-data">
         @csrf
         <label for="location">Location Name</label>
         <input type="text" name="location" id="location" placeholder="Enter location" required>
@@ -98,14 +98,18 @@
         <label for="lng">Longitude</label>
         <input type="text" id="lng" name="longitude" readonly>
 
-        <label for="severity">Flood Severity</label>
+        <label for="severity">Water Level</label>
         <select name="severity" id="severity" required>
-            <option value="">-- Select Severity --</option>
-            <option value="low">Low</option>
-            <option value="moderate">Moderate</option>
-            <option value="high">High</option>
-            <option value="severe">Severe</option>
+            <option value="">-- Select Water level --</option>
+            <option value="low">Ankle Level</option>
+            <option value="moderate">Knee Level</option>
+            <option value="high">Waist Level</option>
+            <option value="severe">Chest Level</option>
+            <option value="severe">Head Level</option>
         </select>
+
+        <label for="image">Upload Image</label>
+        <input type="file" name="image" id="image" accept="image/*">
 
         <div id="map"></div>
 

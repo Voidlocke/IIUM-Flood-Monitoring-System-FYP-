@@ -16,5 +16,6 @@ class UserReport extends Model
         'latitude',
         'longitude',
         'severity',
+        'image',
     ];
 }
