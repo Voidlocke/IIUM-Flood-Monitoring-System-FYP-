@@ -101,11 +101,11 @@
         <label for="severity">Water Level</label>
         <select name="severity" id="severity" required>
             <option value="">-- Select Water level --</option>
-            <option value="low">Ankle Level</option>
-            <option value="moderate">Knee Level</option>
-            <option value="high">Waist Level</option>
-            <option value="severe">Chest Level</option>
-            <option value="severe">Head Level</option>
+            <option value="ankle">Ankle Level</option>
+            <option value="knee">Knee Level</option>
+            <option value="waist">Waist Level</option>
+            <option value="chest">Chest Level</option>
+            <option value="head">Head Level</option>
         </select>
 
         <label for="image">Upload Image</label>

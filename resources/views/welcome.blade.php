@@ -155,17 +155,49 @@ function loadFloodData() {
             data.user_reports.forEach(report => {
                 const lat = report.latitude;
                 const lng = report.longitude;
-                const marker = L.marker([lat,lng])
+                let imageHtml = '';
+                if (report.image) {
+                    imageHtml = `
+                        <br><br>
+                        <img src="/storage/${report.image}"
+                            alt="Flood Image"
+                            style="width: 200px; height: auto; border-radius: 6px; margin-top: 8px;">
+                    `;
+                }
+
+                const marker = L.marker([lat, lng])
                     .addTo(map)
-                    .bindPopup(`<b>User Report</b><br>Location: ${report.location}<br>Description: ${report.description}<br>Severity: ${report.severity}`);
+                    .bindPopup(`
+                        <b>User Report</b><br>
+                        <b>Location:</b> ${report.location}<br>
+                        <b>Description:</b> ${report.description}<br>
+                        <b>Severity:</b> ${report.severity}
+                        ${imageHtml}
+                    `);
+
                 markers.push(marker);
 
                 let severityRadius = 0;
                 switch (report.severity) {
-                    case 'low': severityRadius = 25; break;
-                    case 'moderate': severityRadius = 50; break;
-                    case 'high': severityRadius = 75; break;
-                    case 'severe': severityRadius = 100; break;
+                    case 'ankle':
+                        severityRadius = 20;
+                        break;
+
+                    case 'knee':
+                        severityRadius = 40;
+                        break;
+
+                    case 'waist':
+                        severityRadius = 70;
+                        break;
+
+                    case 'chest':
+                        severityRadius = 100;
+                        break;
+
+                    case 'head':
+                        severityRadius = 140;
+                        break;
                 }
 
                 if (severityRadius > 0) {

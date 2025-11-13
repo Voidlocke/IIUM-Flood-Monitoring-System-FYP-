@@ -19,7 +19,7 @@ class UserReportController extends Controller
             'description' => 'nullable',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'severity' => 'required',
+            'severity' => 'required|in:ankle,knee,waist,chest,head',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
 
