@@ -14,17 +14,13 @@ class AdminController extends Controller
     return view('admin.dashboard', compact('sensors', 'reports'));
 }
 
-public function verify($id) {
-    $report = UserReport::findOrFail($id);
-    $report->verified = true;
-    $report->save();
-    return back()->with('success', 'Report verified.');
+public function approve($id) {
+    UserReport::where('id', $id)->update(['status' => 'approved']);
+    return back()->with('success', 'Report approved.');
 }
 
 public function clear($id) {
-    $report = UserReport::findOrFail($id);
-    $report->active = false;
-    $report->save();
+    UserReport::where('id', $id)->update(['status' => 'cleared']);
     return back()->with('success', 'Report marked as cleared.');
 }
 

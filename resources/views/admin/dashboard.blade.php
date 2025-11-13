@@ -37,28 +37,44 @@
                             <td class="py-3 px-6">{{ $report->location }}</td>
                             <td class="py-3 px-6">{{ $report->severity }}</td>
                             <td class="py-3 px-6">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {{ $report->active ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-600' }}">
-                                    {{ $report->active ? 'Active' : 'Cleared' }}
-                                </span>
+                                @if ($report->status === 'approved')
+                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                        Approved
+                                    </span>
+                                @elseif ($report->status === 'pending')
+                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                        Pending
+                                    </span>
+                                @elseif ($report->status === 'cleared')
+                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-gray-200 text-gray-600">
+                                        Cleared
+                                    </span>
+                                @endif
                             </td>
-                            <td class="py-3 px-6">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {{ $report->verified ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-600' }}">
-                                    {{ $report->verified ? 'Yes' : 'No' }}
-                                </span>
-                            </td>
-                            <td class="py-3 px-6 space-x-1">
-                                <form method="POST" action="/admin/reports/{{ $report->id }}/verify" class="inline">@csrf
-                                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">✔️ Verify</button>
-                                </form>
-                                <form method="POST" action="/admin/reports/{{ $report->id }}/clear" class="inline">@csrf
-                                    <button class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded">🧹 Clear</button>
-                                </form>
-                                <form method="POST" action="/admin/reports/{{ $report->id }}" class="inline">@csrf @method('DELETE')
+                            <td class="py-3 px-6 space-x-1 flex">
+
+                                @if ($report->status === 'pending')
+                                    <form method="POST" action="/admin/reports/{{ $report->id }}/approve" class="inline">
+                                        @csrf
+                                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">✔️ Approve</button>
+                                    </form>
+                                @endif
+
+                                @if ($report->status === 'approved')
+                                    <form method="POST" action="/admin/reports/{{ $report->id }}/clear" class="inline">
+                                        @csrf
+                                        <button class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded">🧹 Clear</button>
+                                    </form>
+                                @endif
+
+                                <form method="POST" action="/admin/reports/{{ $report->id }}" class="inline">
+                                    @csrf
+                                    @method('DELETE')
                                     <button class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">❌ Delete</button>
                                 </form>
+
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>

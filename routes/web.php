@@ -20,7 +20,7 @@ Route::get('/user-reports', function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/reports', [AdminController::class, 'reports']);
-    Route::post('/admin/reports/{id}/verify', [AdminController::class, 'verify']);
+    Route::post('/admin/reports/{id}/approve', [AdminController::class, 'approve']);
     Route::post('/admin/reports/{id}/clear', [AdminController::class, 'clear']);
     Route::delete('/admin/reports/{id}', [AdminController::class, 'destroy']);
 });

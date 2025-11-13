@@ -42,9 +42,9 @@ class UserReportController extends Controller
             $validated['image'] = 'reports/' . $filename;
         }
 
-
+        $validated['status'] = 'pending';
         UserReport::create($validated);
 
-        return redirect('/')->with('success', 'Report submitted!');
+        return redirect('/')->with('success', 'Report submitted! Waiting for admin approval');
     }
 }

@@ -14,11 +14,11 @@ class MapController extends Controller
 
     public function floodData() {
         $sensors = SensorData::all();
-        $users = UserReport::all();
+        $users = UserReport::where('status', 'approved')->get();
 
         return response()->json([
             'sensors' => $sensors,
-            'user_reports' => UserReport::where('created_at', '>=', now()->subDays(7))->get(),
+            'user_reports' => UserReport::where('status', 'approved')->get(),
         ]);
     }
 }
