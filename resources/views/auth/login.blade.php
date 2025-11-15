@@ -1,7 +1,11 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <div class="flex justify-center">
+                <div style="font-size: 120px; line-height: 1;">
+                    🌊
+                </div>
+            </div>
         </x-slot>
 
         <x-validation-errors class="mb-4" />
@@ -32,16 +36,32 @@
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
+            <div class="flex items-center justify-between mt-6">
 
-                <x-button class="ms-4">
+                <!-- Left Side Links -->
+                <div class="flex flex-col text-left space-y-1">
+
+                    @if (Route::has('password.request'))
+                        <a class="text-sm text-gray-600 hover:text-gray-900 underline"
+                        href="{{ route('password.request') }}">
+                            {{ __('Forgot your password?') }}
+                        </a>
+                    @endif
+
+                    @if (Route::has('register'))
+                        <a class="text-sm text-gray-600 hover:text-gray-900 underline"
+                        href="{{ route('register') }}">
+                            {{ __('Create an account') }}
+                        </a>
+                    @endif
+
+                </div>
+
+                <!-- Right Side Button -->
+                <x-button>
                     {{ __('Log in') }}
                 </x-button>
+
             </div>
         </form>
     </x-authentication-card>
