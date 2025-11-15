@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flood Monitor</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         body {
@@ -69,21 +70,92 @@
             transition: opacity 1s ease;
             z-index: 999;
         }
+
+        /* Beautiful Custom Dropdown Button */
+        .user-menu-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 15px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .user-menu-btn:hover {
+            background: #374151;
+        }
+
+        .user-menu-dropdown {
+            position: absolute;
+            right: 0;
+            margin-top: 8px;
+            width: 160px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 6px 0;
+            z-index: 999;
+        }
+
+        .user-menu-dropdown a,
+        .user-menu-dropdown button {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #111827;
+            cursor: pointer;
+        }
+
+        .user-menu-dropdown a:hover,
+        .user-menu-dropdown button:hover {
+            background: #f3f4f6;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <div>
-        <h1>🌊 Flood Monitor</h1>
-    </div>
-    <div>
-        @if(Auth::check())
+    <h1>🌊 Flood Monitor</h1>
+
+    <div style="display: flex; align-items: center; gap: 10px;">
+        @if (Auth::check())
+            {{-- Admin Dashboard Button (only for admins) --}}
             @if(Auth::user()->is_admin)
                 <a href="{{ url('/admin/dashboard') }}" class="btn-login">🛠️ Admin Dashboard</a>
-            @else
-                <span>Hello, {{ Auth::user()->name }}</span>
             @endif
+
+            {{-- Custom Styled Dropdown (NO Jetstream classes) --}}
+            <div x-data="{ open: false }" class="relative">
+
+                <button @click="open = !open" class="user-menu-btn">
+                    {{ Auth::user()->name }}
+                    <svg width="16" height="16" fill="white" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11l3.71-3.77a.75.75 0 111.08 1.04l-4.24 4.3a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+
+                <div x-show="open" @click.outside="open = false"
+                    class="user-menu-dropdown" x-cloak>
+
+                    <a href="{{ route('profile.show') }}">Profile</a>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit">Log Out</button>
+                    </form>
+                </div>
+
+            </div>
         @else
             <a href="{{ route('login') }}" class="btn-login">🔑 Login</a>
         @endif
