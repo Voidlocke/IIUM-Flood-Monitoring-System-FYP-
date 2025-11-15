@@ -8,24 +8,49 @@ use App\Models\SensorData;
 
 class AdminController extends Controller
 {
-    public function index() {
-    $sensors = SensorData::all();
-    $reports = UserReport::all();
-    return view('admin.dashboard', compact('sensors', 'reports'));
-}
+    public function index(Request $request)
+    {
+        // Get the filter from the URL (?filter=pending)
+        $filter = $request->query('filter', 'all');
 
-public function approve($id) {
-    UserReport::where('id', $id)->update(['status' => 'approved']);
-    return back()->with('success', 'Report approved.');
-}
+        // Base query
+        $query = UserReport::orderBy('created_at', 'desc');
 
-public function clear($id) {
-    UserReport::where('id', $id)->update(['status' => 'cleared']);
-    return back()->with('success', 'Report marked as cleared.');
-}
+        // Apply filtering
+        if ($filter === 'pending') {
+            $query->where('status', 'pending');
+        }
+        elseif ($filter === 'approved') {
+            $query->where('status', 'approved');
+        }
+        elseif ($filter === 'cleared') {
+            $query->where('status', 'cleared');
+        }
 
-public function destroy($id) {
-    UserReport::findOrFail($id)->delete();
-    return back()->with('success', 'Report deleted.');
-}
+        // Fetch filtered reports
+        $reports = $query->get();
+
+        // Fetch sensor data
+        $sensors = SensorData::all();
+
+        return view('admin.dashboard', compact('sensors', 'reports', 'filter'));
+    }
+
+    public function approve($id)
+    {
+        UserReport::where('id', $id)->update(['status' => 'approved']);
+        return back()->with('success', 'Report approved.');
+    }
+
+    public function clear($id)
+    {
+        UserReport::where('id', $id)->update(['status' => 'cleared']);
+        return back()->with('success', 'Report marked as cleared.');
+    }
+
+    public function destroy($id)
+    {
+        UserReport::findOrFail($id)->delete();
+        return back()->with('success', 'Report deleted.');
+    }
 }
