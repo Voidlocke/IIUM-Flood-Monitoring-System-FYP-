@@ -126,6 +126,12 @@
     <h1>🌊 Flood Monitor</h1>
 
     <div style="display: flex; align-items: center; gap: 10px;">
+        <div class="report-container">
+            <a href="{{ url('/statistics') }}" class="btn-report"
+            style="background:#10b981;">📊 View Flood Statistics</a>
+        </div>
+
+
         @if (Auth::check())
             {{-- Admin Dashboard Button (only for admins) --}}
             @if(Auth::user()->is_admin)

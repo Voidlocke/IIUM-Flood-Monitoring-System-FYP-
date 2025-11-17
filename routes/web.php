@@ -8,6 +8,7 @@ use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\StatisticsController;
 
 
 Route::get('/user-reports', function () {
@@ -52,3 +53,4 @@ Route::get('/dashboard', function () {
     return redirect('/');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/statistics', [StatisticsController::class, 'index']);
