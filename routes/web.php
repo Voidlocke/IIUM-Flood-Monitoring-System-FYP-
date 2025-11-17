@@ -7,6 +7,7 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 
 
 Route::get('/user-reports', function () {
@@ -23,6 +24,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/reports/{id}/approve', [AdminController::class, 'approve']);
     Route::post('/admin/reports/{id}/clear', [AdminController::class, 'clear']);
     Route::delete('/admin/reports/{id}', [AdminController::class, 'destroy']);
+    Route::get('/admin/users/create', [AdminUserController::class, 'create']);
+    Route::post('/admin/users/store', [AdminUserController::class, 'store']);
 });
 
 Route::get('/admin', function () {
@@ -48,3 +51,4 @@ Route::get('/dashboard', function () {
     // dummy dashboard. dont remove. if removed things will break
     return redirect('/');
 })->middleware(['auth'])->name('dashboard');
+

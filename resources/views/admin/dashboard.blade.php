@@ -4,6 +4,11 @@
 <div class="container mx-auto px-4 py-6">
     <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
 
+    <a href="/admin/users/create"
+        class="bg-gray-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">
+        ➕ Create Admin
+    </a>
+
     <div class="mb-4 space-x-2">
         <a href="?filter=all" class="px-3 py-1 rounded
             {{ $filter == 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200' }}">
@@ -24,6 +29,7 @@
             {{ $filter == 'cleared' ? 'bg-gray-500 text-white' : 'bg-gray-200' }}">
             Cleared
         </a>
+
     </div>
 
 
