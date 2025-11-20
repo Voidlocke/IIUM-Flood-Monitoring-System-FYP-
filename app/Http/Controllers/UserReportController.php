@@ -23,6 +23,9 @@ class UserReportController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
 
+        // Add the user_id
+        $validated['user_id'] = auth()->id();
+
         if ($request->hasFile('image')) {
             $image = $request->file('image');
 

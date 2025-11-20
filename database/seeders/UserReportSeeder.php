@@ -24,6 +24,7 @@ class UserReportSeeder extends Seeder
                 'severity' => $severities[array_rand($severities)],
                 'latitude' => $coord['lat'],
                 'longitude' => $coord['lng'],
+                'user_id' => 1,
             ]);
         }
     }

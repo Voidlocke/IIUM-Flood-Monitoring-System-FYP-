@@ -9,6 +9,11 @@ use App\Http\Controllers\SensorDataController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\ProfileController;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
 
 
 Route::get('/user-reports', function () {
@@ -35,8 +40,10 @@ Route::get('/admin', function () {
 
 Route::get('/', [MapController::class, 'index']);
 Route::get('/api/flood-data', [MapController::class, 'floodData']); // For JS AJAX
-Route::get('/report', [UserReportController::class, 'create']);
-Route::post('/report', [UserReportController::class, 'store']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/report', [UserReportController::class, 'create']);
+    Route::post('/report', [UserReportController::class, 'store']);
+});
 Route::get('/api/sensors', [SensorDataController::class, 'index']);
 
 
@@ -54,3 +61,42 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/statistics', [StatisticsController::class, 'index']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+});
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->middleware('guest')->name('login');
+
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware(['guest']);
+
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware(['auth'])
+    ->name('logout');
+
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->middleware(['guest'])
+    ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware(['guest']);
+
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');

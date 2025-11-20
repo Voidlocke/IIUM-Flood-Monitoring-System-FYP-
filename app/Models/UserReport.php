@@ -18,5 +18,6 @@ class UserReport extends Model
         'severity',
         'image',
         'status',
+        'user_id',
     ];
 }
