@@ -139,5 +139,62 @@ new Chart(document.getElementById('reportsChart'), {
 });
 </script>
 
+<h3 style="margin-top:40px;">Sensor Severity Levels</h3>
+<canvas id="sensorSeverityChart"></canvas>
+
+<script>
+new Chart(document.getElementById('sensorSeverityChart'), {
+    type: 'bar',
+    data: {
+        labels: {!! json_encode(array_keys($sensorSeverityCounts)) !!},
+        datasets: [{
+            label: 'Sensor Readings',
+            data: {!! json_encode(array_values($sensorSeverityCounts)) !!},
+            borderWidth: 1
+        }]
+    }
+});
+</script>
+
+<h3 style="margin-top:40px;">Sensor Water Levels Over Time</h3>
+<canvas id="sensorWaterLevelChart"></canvas>
+
+<script>
+const sensorLabels = @json($sensorData->pluck('date'));
+const sensorValues = @json($sensorData->pluck('avg_level'));
+
+new Chart(document.getElementById('sensorWaterLevelChart'), {
+    type: 'line',
+    data: {
+        labels: sensorLabels,
+        datasets: [{
+            label: 'Average Water Level (meters)',
+            data: sensorValues,
+            borderWidth: 3,
+            tension: 0.3
+        }]
+    }
+});
+</script>
+
+<h3 style="margin-top:40px;">Sensor Summary</h3>
+
+<table>
+    <tr>
+        <th>Sensor Location</th>
+        <th>Water Level (m)</th>
+        <th>Last Updated</th>
+    </tr>
+
+    @foreach($latestSensorData as $sensor)
+        <tr>
+            <td>{{ $sensor->location }}</td>
+            <td>{{ number_format($sensor->water_level, 2) }}</td>
+            <td>{{ $sensor->created_at->format('d M Y, h:i A') }}</td>
+        </tr>
+    @endforeach
+</table>
+
+
 </body>
 </html>

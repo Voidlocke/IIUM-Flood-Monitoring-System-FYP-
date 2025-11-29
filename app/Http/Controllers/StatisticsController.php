@@ -46,6 +46,28 @@ class StatisticsController extends Controller
         $sensorCount = SensorData::count();
         $highWaterSensors = SensorData::where('water_level', '>', 20)->count();
 
+        // 1. Get latest sensor data for display
+        $latestSensorData = SensorData::orderBy('created_at', 'desc')->get();
+
+        // 2. Compute water level ranges
+        $sensorSeverityCounts = [
+            'low' => SensorData::where('water_level', '<=', 0.20)->count(),
+            'moderate' => SensorData::whereBetween('water_level', [0.21, 0.50])->count(),
+            'high' => SensorData::whereBetween('water_level', [0.51, 1.00])->count(),
+            'severe' => SensorData::where('water_level', '>', 1.00)->count(),
+        ];
+
+        // 3. Sensor water-level time series (based on the filter range)
+        $sensorData = SensorData::selectRaw('DATE(created_at) as date, AVG(water_level) as avg_level')
+            ->when($range == '7d', fn($q) => $q->where('created_at', '>=', now()->subDays(7)))
+            ->when($range == '1m', fn($q) => $q->where('created_at', '>=', now()->subMonth()))
+            ->when($range == '6m', fn($q) => $q->where('created_at', '>=', now()->subMonths(6)))
+            ->when($range == '1y', fn($q) => $q->where('created_at', '>=', now()->subYear()))
+            ->when($range == '5y', fn($q) => $q->where('created_at', '>=', now()->subYears(5)))
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->get();
+
         return view('statistics', [
             'totalReports'      => $totalReports,
             'severityCounts'    => $severityCounts,
@@ -53,6 +75,11 @@ class StatisticsController extends Controller
             'sensorCount'       => $sensorCount,
             'highWaterSensors'  => $highWaterSensors,
             'range'             => $range,
+
+            // NEW SENSOR DATA
+            'sensorSeverityCounts' => $sensorSeverityCounts,
+            'sensorData' => $sensorData,
+            'latestSensorData' => $latestSensorData,
         ]);
     }
 }
