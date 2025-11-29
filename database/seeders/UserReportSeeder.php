@@ -15,7 +15,7 @@ class UserReportSeeder extends Seeder
             ['lat' => 3.2485, 'lng' => 101.7352],
         ];
 
-        $severities = ['low', 'moderate', 'high', 'severe'];
+        $severities = ['ankle', 'knee', 'waist', 'chest', 'head'];
 
         foreach ($coords as $i => $coord) {
             UserReport::create([

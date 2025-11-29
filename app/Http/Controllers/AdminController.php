@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserReport;
 use App\Models\SensorData;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\FloodAlertMail;
+
 
 class AdminController extends Controller
 {
@@ -38,8 +41,23 @@ class AdminController extends Controller
 
     public function approve($id)
     {
-        UserReport::where('id', $id)->update(['status' => 'approved']);
-        return back()->with('success', 'Report approved.');
+        $report = UserReport::findOrFail($id);
+
+        $report->status = 'approved';
+        $report->save();
+
+        // Build alert message
+        $message = "⚠️ New Flood Report Approved\n\n" .
+                    "Location: {$report->location}\n" .
+                    "Severity: {$report->severity}\n" .
+                    "Description: {$report->description}";
+
+        // Send flood alert email to all users
+        foreach (\App\Models\User::all() as $user) {
+            Mail::to($user->email)->send(new FloodAlertMail($message));
+        }
+
+        return back()->with('success', 'Report approved and alert sent!');
     }
 
     public function clear($id)
