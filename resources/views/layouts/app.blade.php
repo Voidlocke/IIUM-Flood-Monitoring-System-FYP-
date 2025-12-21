@@ -35,7 +35,9 @@
 
             <!-- Page Content -->
             <main>
-                @yield('content')
+                <div class="text-gray-900">
+                    @yield('content')
+                </div>
             </main>
         </div>
 

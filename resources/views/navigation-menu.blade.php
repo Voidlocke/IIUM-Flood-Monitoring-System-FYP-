@@ -15,7 +15,7 @@
                 {{-- If on admin dashboard → show Back to Home --}}
                 @if(request()->is('admin*'))
                     <a href="{{ url('/') }}"
-                       class="bg-blue-500 px-4 py-2 rounded text-white font-medium hover:bg-blue-600">
+                       class="btn-login bg-green-500 px-4 py-2 rounded text-white font-medium hover:bg-green-600">
                        ⬅️ Back to Home
                     </a>
 

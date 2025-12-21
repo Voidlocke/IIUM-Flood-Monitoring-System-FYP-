@@ -1,35 +1,63 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
+<div class="not-prose">
+<div class="bg-red-500 text-white p-6 text-2xl">
+    TAILWIND TEST BOX
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-6">
     <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
 
-    <a href="/admin/users/create"
-        class="bg-gray-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">
-        ➕ Create Admin
-    </a>
+    {{-- TOP ACTION BAR --}}
+    <div class="mb-6 flex flex-col gap-4">
 
-    <div class="mb-4 space-x-2">
-        <a href="?filter=all" class="px-3 py-1 rounded
-            {{ $filter == 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200' }}">
-            All
-        </a>
+        {{-- Create Admin --}}
+        <div class="w-fit">
+            <a href="/admin/users/create"
+            class="inline-flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md shadow text-sm font-semibold">
+                ➕ Create Admin
+            </a>
+        </div>
 
-        <a href="?filter=pending" class="px-3 py-1 rounded
-            {{ $filter == 'pending' ? 'bg-yellow-500 text-white' : 'bg-gray-200' }}">
-            Pending
-        </a>
+        {{-- Filters --}}
+        <div class="flex flex-wrap gap-2">
+            {{-- All --}}
+            <a href="?filter=all"
+            class="px-4 py-2 rounded-md text-sm font-semibold transition
+            {{ $filter=='all'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }}">
+                All
+            </a>
 
-        <a href="?filter=approved" class="px-3 py-1 rounded
-            {{ $filter == 'approved' ? 'bg-green-600 text-white' : 'bg-gray-200' }}">
-            Approved
-        </a>
+            {{-- Pending --}}
+            <a href="?filter=pending"
+            class="px-4 py-2 rounded-md text-sm font-semibold transition
+            {{ $filter=='pending'
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' }}">
+                Pending
+            </a>
 
-        <a href="?filter=cleared" class="px-3 py-1 rounded
-            {{ $filter == 'cleared' ? 'bg-gray-500 text-white' : 'bg-gray-200' }}">
-            Cleared
-        </a>
+            {{-- Approved --}}
+            <a href="?filter=approved"
+            class="px-4 py-2 rounded-md text-sm font-semibold transition
+            {{ $filter=='approved'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-green-100 text-green-800 hover:bg-green-200' }}">
+                Approved
+            </a>
 
+            {{-- Cleared --}}
+            <a href="?filter=cleared"
+            class="px-4 py-2 rounded-md text-sm font-semibold transition
+            {{ $filter=='cleared'
+                    ? 'bg-gray-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Cleared
+            </a>
+        </div>
     </div>
 
 
@@ -100,30 +128,40 @@
                             </td>
 
                             <!-- Actions -->
-                            <td class="py-3 px-6 space-x-1 flex">
+                            <td class="py-3 px-6">
+                                <div class="flex flex-wrap gap-2">
 
                                 @if ($report->status === 'pending')
-                                    <form method="POST" action="/admin/reports/{{ $report->id }}/approve" class="inline">
+                                    <form method="POST" action="/admin/reports/{{ $report->id }}/approve">
                                         @csrf
-                                        <button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">
+                                        <button type="submit" class="inline-flex items-center justify-center w-28 px-4 py-2 text-sm font-semibold text-white rounded"
+                                        style="background-color:#2563eb"
+                                        onmouseover="this.style.backgroundColor='#1d4ed8'"
+                                        onmouseout="this.style.backgroundColor='#2563eb'">
                                             ✔️ Approve
                                         </button>
                                     </form>
                                 @endif
 
                                 @if ($report->status === 'approved')
-                                    <form method="POST" action="/admin/reports/{{ $report->id }}/clear" class="inline">
+                                    <form method="POST" action="/admin/reports/{{ $report->id }}/clear">
                                         @csrf
-                                        <button class="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 rounded">
+                                        <button type="submit" class="inline-flex items-center justify-center w-28 px-4 py-2 text-sm font-semibold text-white rounded"
+                                        style="background-color:#f59e0b"
+                                        onmouseover="this.style.backgroundColor='#d97706'"
+                                        onmouseout="this.style.backgroundColor='#f59e0b'">
                                             🧹 Clear
                                         </button>
                                     </form>
                                 @endif
 
-                                <form method="POST" action="/admin/reports/{{ $report->id }}" class="inline">
+                                <form method="POST" action="/admin/reports/{{ $report->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">
+                                    <button type="submit" class="inline-flex items-center justify-center w-28 px-4 py-2 text-sm font-semibold text-white rounded"
+                                    style="background-color:#dc2626"
+                                    onmouseover="this.style.backgroundColor='#b91c1c'"
+                                    onmouseout="this.style.backgroundColor='#dc2626'">
                                         ❌ Delete
                                     </button>
                                 </form>
@@ -136,6 +174,7 @@
 
         </div>
     </div>
+</div>
 </div>
 @endsection
 
