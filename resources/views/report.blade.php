@@ -84,7 +84,7 @@
 <div class="container">
     <h2>Report a Flood</h2>
 
-    <form method="POST" action="/report" enctype="multipart/form-data">
+    <form id="reportForm" method="POST" action="/report" enctype="multipart/form-data">
         @csrf
         <label for="location">Location Name</label>
         <input type="text" name="location" id="location" placeholder="Enter location" required>
@@ -92,11 +92,10 @@
         <label for="description">Description</label>
         <textarea name="description" id="description" placeholder="Optional details"></textarea>
 
-        <label for="lat">Latitude</label>
-        <input type="text" id="lat" name="latitude" readonly>
 
-        <label for="lng">Longitude</label>
-        <input type="text" id="lng" name="longitude" readonly>
+        <input type="hidden" id="lat" name="latitude" readonly>
+
+        <input type="hidden" id="lng" name="longitude" readonly>
 
         <label for="severity">Water Level</label>
         <select name="severity" id="severity" required>
@@ -111,6 +110,10 @@
         <label for="image">Upload Image</label>
         <input type="file" name="image" id="image" accept="image/*">
 
+        <p id="mapHelp" style="margin: 10px 0; color:#374151; font-size: 14px;">
+            📍 Click on the map to choose the flood location.
+        </p>
+
         <div id="map"></div>
 
         <button type="submit">Submit Report</button>
@@ -119,15 +122,35 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-    let map = L.map('map').setView([3.2497, 101.7342], 15); // IIUM center
+    const iiumBounds = L.latLngBounds(
+        [3.2420, 101.7260], // South-West
+        [3.2660, 101.7480]  // North-East
+    );
+
+    let map = L.map('map', {
+        center: [3.2497, 101.7342],
+        zoom: 17,
+        minZoom: 16,
+        maxZoom: 18,
+        maxBounds: iiumBounds,
+        maxBoundsViscosity: 1.0
+    });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 16,
         maxZoom: 18,
     }).addTo(map);
 
     let marker;
 
     map.on('click', function(e) {
+        // Extra safety: prevent clicks outside IIUM
+        if (!iiumBounds.contains(e.latlng)) {
+            alert("Please select a location inside IIUM campus only.");
+            return;
+        }
+
+
         let lat = e.latlng.lat.toFixed(6);
         let lng = e.latlng.lng.toFixed(6);
 
@@ -141,5 +164,18 @@
         }
     });
 </script>
+
+<script>
+document.getElementById('reportForm').addEventListener('submit', function (e) {
+    const lat = document.getElementById('lat').value;
+    const lng = document.getElementById('lng').value;
+
+    if (!lat || !lng) {
+        e.preventDefault();
+        alert("Please click on the map to select a flood location before submitting.");
+    }
+});
+</script>
+
 </body>
 </html>

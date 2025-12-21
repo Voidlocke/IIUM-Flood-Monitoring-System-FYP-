@@ -191,9 +191,22 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-let map = L.map('map').setView([3.249759542719027, 101.7342551287492], 17);
+const iiumBounds = L.latLngBounds(
+    [3.2420, 101.7260], // South-West
+    [3.2660, 101.7480]  // North-East
+);
+
+let map = L.map('map', {
+    center: [3.249759542719027, 101.7342551287492],
+    zoom: 17,
+    minZoom: 16,
+    maxZoom: 18,
+    maxBounds: iiumBounds,
+    maxBoundsViscosity: 1.0 // prevents dragging outside
+});
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    minZoom: 16,
     maxZoom: 18,
 }).addTo(map);
 
