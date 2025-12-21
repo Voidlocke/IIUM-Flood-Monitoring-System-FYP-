@@ -36,4 +36,20 @@ class ProfileController extends Controller
             'reportsOverTime'
         ));
     }
+
+    public function updateEmailPreferences(Request $request)
+    {
+        $request->validate([
+            'receive_flood_alerts' => 'nullable|boolean',
+        ]);
+
+        $user = $request->user();
+
+        $user->update([
+            'receive_flood_alerts' => $request->has('receive_flood_alerts'),
+        ]);
+
+        return back()->with('success', 'Email preferences updated.');
+    }
+
 }

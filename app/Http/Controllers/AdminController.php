@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserReport;
 use App\Models\SensorData;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FloodAlertMail;
 
@@ -52,8 +53,10 @@ class AdminController extends Controller
                     "Severity: {$report->severity}\n" .
                     "Description: {$report->description}";
 
-        // Send flood alert email to all users
-        foreach (\App\Models\User::all() as $user) {
+        // Send flood alert email to all users who opt in
+        $users = User::where('receive_flood_alerts', true)->get();
+
+        foreach ($users as $user) {
             Mail::to($user->email)->send(new FloodAlertMail($message));
         }
 

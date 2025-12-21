@@ -12,6 +12,33 @@
             <p><strong>Email:</strong> {{ $user->email }}</p>
         </div>
 
+        {{-- EMAIL PREFERENCES --}}
+        <div class="bg-white p-6 shadow sm:rounded-lg">
+            <h3 class="text-lg font-semibold mb-4">Email Preferences</h3>
+
+            <form method="POST" action="{{ route('profile.email.preferences') }}">
+                @csrf
+                @method('PATCH')
+
+                <label class="flex items-center space-x-3">
+                    <input type="checkbox" name="receive_flood_alerts"
+                        value="1"
+                        {{ $user->receive_flood_alerts ? 'checked' : '' }}
+                        class="w-4 h-4">
+
+                    <span>
+                        I want to receive flood alert emails
+                    </span>
+                </label>
+
+                <button type="submit"
+                    class="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                    Save Preferences
+                </button>
+            </form>
+        </div>
+
+
         {{-- USER REPORTS --}}
         <div class="bg-white p-6 shadow sm:rounded-lg">
             <h3 class="text-lg font-semibold mb-4">Your Flood Reports</h3>

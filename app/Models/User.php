@@ -30,6 +30,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'receive_flood_alerts',
     ];
 
     /**

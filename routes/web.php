@@ -66,6 +66,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 });
 
+Route::patch('/profile/email-preferences', [ProfileController::class, 'updateEmailPreferences'])
+    ->middleware('auth')
+    ->name('profile.email.preferences');
+
+
 Route::get('/login', function () {
     return view('auth.login');
 })->middleware('guest')->name('login');
