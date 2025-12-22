@@ -2,10 +2,6 @@
 
 @section('content')
 <div class="not-prose">
-<div class="bg-red-500 text-white p-6 text-2xl">
-    TAILWIND TEST BOX
-</div>
-
 <div class="max-w-7xl mx-auto px-4 py-6">
     <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
 
