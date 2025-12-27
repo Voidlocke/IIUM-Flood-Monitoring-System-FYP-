@@ -151,7 +151,7 @@
     </div>
 </div>
 
-<!-- ================= LEAFLET & MAP LOGIC (UNCHANGED) ================= -->
+<!-- ================= LEAFLET & MAP LOGIC ================= -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <!-- (your entire map JS stays exactly the same here) -->
 <script>

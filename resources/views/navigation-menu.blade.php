@@ -24,25 +24,22 @@
         {{-- Right --}}
         <div class="hidden sm:flex items-center space-x-4">
 
-            {{-- Admin Buttons --}}
+            {{-- Navigation Buttons --}}
+
+            {{-- Back to Home (EVERYONE, including guests) --}}
+            <a href="{{ url('/') }}"
+            class="px-4 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow">
+                ⬅️ Back to Home
+            </a>
+
+            {{-- Admin Dashboard (ADMIN ONLY) --}}
             @if(Auth::check() && Auth::user()->is_admin)
-
-                {{-- If on admin dashboard → show Back to Home --}}
-                @if(request()->is('admin*'))
-                    <a href="{{ url('/') }}"
-                       class="btn-login bg-green-500 px-4 py-2 rounded text-white font-medium hover:bg-green-600">
-                       ⬅️ Back to Home
-                    </a>
-
-                {{-- If not on admin dashboard → show Admin Dashboard --}}
-                @else
-                    <a href="{{ url('/admin/dashboard') }}"
-                       class="bg-blue-500 px-4 py-2 rounded text-white font-medium hover:bg-blue-600">
-                       🛠️ Admin Dashboard
-                    </a>
-                @endif
-
+                <a href="{{ url('/admin/dashboard') }}"
+                class="px-4 py-2 text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow">
+                    🛠️ Admin Dashboard
+                </a>
             @endif
+
 
             {{-- User Menu --}}
             @if(Auth::check())
@@ -90,19 +87,20 @@
     {{-- Mobile Dropdown --}}
     <div x-show="mobile" x-cloak class="sm:hidden mt-3 bg-[#111827] p-3 rounded">
 
+        {{-- Back to Home (EVERYONE, including guests) --}}
+        <a href="{{ url('/') }}"
+        class="block w-full px-3 py-2 mb-2 bg-green-500 rounded text-center text-white">
+        ⬅️ Back to Home
+        </a>
+
+        {{-- Admin Dashboard (ADMIN ONLY) --}}
         @if(Auth::check() && Auth::user()->is_admin)
-            @if(request()->is('admin*'))
-                <a href="{{ url('/') }}"
-                   class="block w-full px-3 py-2 mb-2 bg-blue-500 rounded text-center">
-                   ⬅️ Back to Home
-                </a>
-            @else
-                <a href="{{ url('/admin/dashboard') }}"
-                   class="block w-full px-3 py-2 mb-2 bg-blue-500 rounded text-center">
-                   🛠️ Admin Dashboard
-                </a>
-            @endif
+            <a href="{{ url('/admin/dashboard') }}"
+            class="block w-full px-3 py-2 mb-2 bg-blue-500 rounded text-center text-white">
+            🛠️ Admin Dashboard
+            </a>
         @endif
+
 
         <a href="{{ route('profile.show') }}" class="block py-2">Profile</a>
 

@@ -44,5 +44,8 @@
         @stack('modals')
 
         @livewireScripts
+
+        {{-- Page-specific scripts --}}
+        @stack('scripts')
     </body>
 </html>

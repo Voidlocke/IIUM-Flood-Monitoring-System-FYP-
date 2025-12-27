@@ -7,26 +7,7 @@
 
     <div class="max-w-4xl mx-auto px-6 space-y-8">
 
-        {{-- TOP ACTION BAR --}}
-        <div class="flex flex-wrap gap-3">
-            <a href="/"
-                class="inline-flex items-center gap-2
-                    bg-blue-600 hover:bg-blue-700
-                    text-white px-5 py-2.5 rounded-xl
-                    shadow font-semibold">
-                ⬅ Back to Home
-            </a>
-
-            @if($user->is_admin)
-                <a href="/admin/dashboard"
-                    class="inline-flex items-center gap-2
-                            bg-green-600 hover:bg-green-700
-                            text-white px-5 py-2.5 rounded-xl
-                            shadow font-semibold">
-                    🛠️ Go to Admin Dashboard
-                </a>
-            @endif
-        </div>
+        {{-- Header --}}
 
         <div class="flex items-center gap-4
                         bg-white/70 backdrop-blur
