@@ -11,19 +11,24 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // Reports by this user
+        // ALL reports for table display
         $reports = UserReport::where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'cleared'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Severity counts for this user only
-        $severityCounts = UserReport::where('user_id', $user->id)
+        // VERIFIED reports only (approved + cleared)
+        $verifiedReports = UserReport::where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'cleared']);
+
+        // Severity counts (verified only)
+        $severityCounts = (clone $verifiedReports)
             ->selectRaw('severity, COUNT(*) as total')
             ->groupBy('severity')
             ->pluck('total', 'severity');
 
-        // Reports over time (grouped by date)
-        $reportsOverTime = UserReport::where('user_id', $user->id)
+        // Reports over time (verified only)
+        $reportsOverTime = (clone $verifiedReports)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
             ->groupBy('date')
             ->orderBy('date')
