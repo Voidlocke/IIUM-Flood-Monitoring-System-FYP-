@@ -95,6 +95,39 @@
     </div>
 </section>
 
+@if(session('success'))
+<div
+    x-data="{ show: true }"
+    x-init="setTimeout(() => show = false, 4000)"
+    x-show="show"
+    x-transition:enter="transition ease-out duration-500"
+    x-transition:enter-start="opacity-0 translate-y-2"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-700"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="max-w-7xl mx-auto px-6 mt-6"
+>
+    <div class="flex items-start gap-3
+                bg-green-100 border border-green-300
+                text-green-800 px-5 py-4 rounded-xl
+                shadow-md">
+
+        <span class="text-2xl mt-0.5">✅</span>
+
+        <div class="flex-1 font-semibold">
+            {{ session('success') }}
+        </div>
+
+        <!-- Optional close button -->
+        <button @click="show = false"
+                class="text-green-700 hover:text-green-900 font-bold">
+            ✕
+        </button>
+    </div>
+</div>
+@endif
+
 <!-- ================= MAP PANEL ================= -->
 <div class="max-w-7xl mx-auto px-6 py-8">
     <div class="bg-white rounded-2xl shadow-xl border overflow-hidden">

@@ -92,9 +92,9 @@
                             <!-- Image -->
                             <td class="py-3 px-6">
                                 @if($report->image)
-                                    <img src="/storage/{{ $report->image }}"
+                                    <img src="{{ asset('storage/' . $report->image) }}"
                                         class="w-20 h-auto rounded cursor-pointer"
-                                        onclick="openImageModal('/storage/{{ $report->image }}')">
+                                        onclick="openImageModal('{{ asset('storage/' . $report->image) }}')">
                                 @else
                                     <span class="text-gray-400 text-xs">No image</span>
                                 @endif
@@ -172,7 +172,7 @@
     </div>
 </div>
 </div>
-@endsection
+
 
 <!-- Image Preview Modal -->
 <div id="image-modal"
@@ -192,3 +192,7 @@ document.getElementById('image-modal').addEventListener('click', function() {
     this.style.display = 'none';
 });
 </script>
+
+
+@endsection
+
