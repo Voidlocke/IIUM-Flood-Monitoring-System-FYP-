@@ -130,7 +130,7 @@
                             text-white px-6 py-2.5
                             rounded-xl shadow-lg
                             font-semibold">
-                        🚪 Log Out
+                        Log Out
                     </button>
                 </form>
             </div>

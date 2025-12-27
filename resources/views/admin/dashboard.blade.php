@@ -181,7 +181,7 @@
                                     <button class="px-4 py-2 rounded-lg
                                                    bg-yellow-500 hover:bg-yellow-600
                                                    text-white text-xs font-semibold">
-                                        🧹 Clear
+                                        🧹 Resolved
                                     </button>
                                 </form>
                                 @endif

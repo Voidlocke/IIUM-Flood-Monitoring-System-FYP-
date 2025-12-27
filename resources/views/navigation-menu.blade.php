@@ -2,8 +2,23 @@
     <div class="flex justify-between items-center">
 
         {{-- Left: Logo --}}
-        <div class="flex items-center space-x-3">
-            <h1 class="text-xl font-bold">🌊 Flood Monitor</h1>
+        <div class="flex items-center gap-3">
+            <a href="{{ url('/') }}" class="flex items-center gap-4">
+                <!-- Logo wrapper -->
+                <div class="h-12 w-12 flex items-center justify-center">
+                    <img
+                        src="{{ asset('images/flood-monitor-logo.png') }}"
+                        alt="Flood Monitor Logo"
+                        class="h-full w-auto scale-150 drop-shadow-lg"
+                    >
+                </div>
+
+                <!-- Title -->
+                <span class="text-xl md:text-2xl font-extrabold tracking-wide">
+                    IIUM Flood Monitor
+                </span>
+            </a>
+
         </div>
 
         {{-- Right --}}

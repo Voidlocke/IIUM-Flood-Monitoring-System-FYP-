@@ -10,28 +10,40 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
-<!-- 🌊 MORE VIBRANT BACKGROUND -->
+<!-- MORE VIBRANT BACKGROUND -->
 <body class="text-slate-800 min-h-screen
              bg-gradient-to-br from-emerald-100 via-cyan-100 to-sky-200">
 
 <!-- ================= NAVBAR ================= -->
 <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-lg">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">
-            🌊 Flood Monitor
-        </h1>
+        <a href="{{ url('/') }}" class="flex items-center gap-4">
+            <!-- Logo wrapper -->
+            <div class="h-12 w-12 flex items-center justify-center">
+                <img
+                    src="{{ asset('images/flood-monitor-logo.png') }}"
+                    alt="Flood Monitor Logo"
+                    class="h-full w-auto scale-150 drop-shadow-lg"
+                >
+            </div>
+
+            <!-- Title -->
+            <span class="text-xl md:text-2xl font-extrabold tracking-wide">
+                IIUM Flood Monitor
+            </span>
+        </a>
 
         <div class="flex items-center gap-3">
             <a href="{{ url('/statistics') }}"
                class="px-4 py-2 text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow">
-                📊 Statistics
+                📊 Flood Data
             </a>
 
             @auth
                 @if(Auth::user()->is_admin)
                     <a href="{{ url('/admin/dashboard') }}"
                        class="px-4 py-2 text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow">
-                        🛠 Admin
+                        🛠 Admin Dashboard
                     </a>
                 @endif
 
@@ -132,8 +144,8 @@
 <div class="max-w-7xl mx-auto px-6 py-8">
     <div class="bg-white rounded-2xl shadow-xl border overflow-hidden">
         <div class="flex items-center justify-between px-6 py-4 border-b bg-slate-50">
-            <h2 class="text-lg font-semibold">🌍 IIUM Flood Monitoring Map</h2>
-            <span class="text-sm text-slate-500">Live data visualization</span>
+            <h2 class="text-lg font-semibold">IIUM Flood Monitoring Map</h2>
+            <span class="text-sm text-slate-500">Live data</span>
         </div>
         <div id="map" class="h-[520px]" style="min-height:520px"></div>
     </div>
@@ -287,7 +299,7 @@ loadFloodData();
 setInterval(loadFloodData, 10000);
 </script>
 
-<!-- ================= LEGEND (RESTORED) ================= -->
+<!-- ================= LEGEND ================= -->
 <div class="max-w-7xl mx-auto px-6 pb-8">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-white p-4 rounded-lg shadow flex items-center gap-3">
@@ -305,7 +317,7 @@ setInterval(loadFloodData, 10000);
     </div>
 </div>
 
-<!-- ================= CTA (RESTORED) ================= -->
+<!-- ================= CTA ================= -->
 @auth
 <div class="max-w-7xl mx-auto px-6 pb-14 text-center">
     <a href="{{ url('/report') }}"
@@ -315,7 +327,7 @@ setInterval(loadFloodData, 10000);
               text-white text-lg font-bold
               rounded-full shadow-2xl
               transform hover:scale-105 transition">
-        🚨 Report a Flood
+        Report a Flood
     </a>
 
     <p class="mt-3 text-sm text-slate-600">

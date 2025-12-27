@@ -2,8 +2,8 @@
     <x-authentication-card>
         <x-slot name="logo">
             <div class="flex justify-center">
-                <div style="font-size: 120px; line-height: 1;">
-                    🌊
+                <div>
+                    <x-authentication-card-logo />
                 </div>
             </div>
         </x-slot>
