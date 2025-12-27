@@ -1,169 +1,204 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="not-prose">
-<div class="max-w-7xl mx-auto px-4 py-6">
-    <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
+<div class="not-prose
+            min-h-screen
+            bg-gradient-to-br from-emerald-100 via-cyan-100 to-sky-200">
 
-    {{-- TOP ACTION BAR --}}
-    <div class="mb-6 flex flex-col gap-4">
+<div class="max-w-7xl mx-auto px-6 py-10">
 
-        {{-- Create Admin --}}
-        <div class="w-fit">
-            <a href="/admin/users/create"
-            class="inline-flex items-center gap-2 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-md shadow text-sm font-semibold">
-                ➕ Create Admin
-            </a>
+    <!-- ================= HEADER ================= -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-4
+                    bg-white/70 backdrop-blur
+                    border-l-6 border-gray-200
+                    rounded-2xl px-6 py-4 shadow-lg">
+            <span class="text-3xl">🛠</span>
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-wide">
+                Admin Dashboard
+            </h2>
         </div>
 
-        {{-- Filters --}}
-        <div class="flex flex-wrap gap-2">
-            {{-- All --}}
-            <a href="?filter=all"
-            class="px-4 py-2 rounded-md text-sm font-semibold transition
-            {{ $filter=='all'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }}">
-                All
-            </a>
-
-            {{-- Pending --}}
-            <a href="?filter=pending"
-            class="px-4 py-2 rounded-md text-sm font-semibold transition
-            {{ $filter=='pending'
-                    ? 'bg-yellow-500 text-white'
-                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' }}">
-                Pending
-            </a>
-
-            {{-- Approved --}}
-            <a href="?filter=approved"
-            class="px-4 py-2 rounded-md text-sm font-semibold transition
-            {{ $filter=='approved'
-                    ? 'bg-green-600 text-white'
-                    : 'bg-green-100 text-green-800 hover:bg-green-200' }}">
-                Approved
-            </a>
-
-            {{-- Cleared --}}
-            <a href="?filter=cleared"
-            class="px-4 py-2 rounded-md text-sm font-semibold transition
-            {{ $filter=='cleared'
-                    ? 'bg-gray-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
-                Cleared
-            </a>
-        </div>
+        <a href="/admin/users/create"
+           class="inline-flex items-center gap-2
+                  bg-slate-800 hover:bg-slate-900
+                  text-white px-5 py-3 rounded-xl
+                  shadow-lg text-sm font-semibold">
+            ➕ Create Admin
+        </a>
     </div>
 
+    <!-- ================= FILTERS ================= -->
+    <div class="mb-10 flex flex-wrap gap-3">
+        @php
+            $btn = 'px-4 py-2 rounded-lg text-sm font-semibold transition shadow';
+        @endphp
 
-    <!-- Sensor Data -->
-    <div class="mb-8">
-        <h3 class="text-xl font-semibold mb-4">Sensor Data</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <a href="?filter=all"
+           class="{{ $btn }}
+           {{ $filter=='all'
+                ? 'bg-blue-600 text-white'
+                : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }}">
+            All
+        </a>
+
+        <a href="?filter=pending"
+           class="{{ $btn }}
+           {{ $filter=='pending'
+                ? 'bg-yellow-500 text-white'
+                : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' }}">
+            Pending Verification
+        </a>
+
+        <a href="?filter=approved"
+           class="{{ $btn }}
+           {{ $filter=='approved'
+                ? 'bg-green-600 text-white'
+                : 'bg-green-100 text-green-800 hover:bg-green-200' }}">
+            Ongoing
+        </a>
+
+        <a href="?filter=cleared"
+           class="{{ $btn }}
+           {{ $filter=='cleared'
+                ? 'bg-slate-600 text-white'
+                : 'bg-slate-200 text-slate-700 hover:bg-slate-300' }}">
+            Resolved
+        </a>
+    </div>
+
+    <!-- ================= SENSOR DATA ================= -->
+    <div class="mb-12">
+        <div class="mb-6 flex items-center gap-3
+                    bg-white/60 backdrop-blur
+                    border-l-6 border-emerald-500
+                    rounded-xl px-5 py-3 shadow">
+            <h3 class="text-2xl font-bold text-slate-900 tracking-wide">
+                Sensor Data
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             @foreach ($sensors as $sensor)
-                <div class="bg-white shadow rounded-lg p-4">
-                    <h4 class="font-medium">{{ $sensor->location }}</h4>
-                    <p>Water Level: <span class="font-semibold">{{ $sensor->water_level }}m</span></p>
+                <div class="bg-white/80 backdrop-blur
+                            rounded-2xl p-5 shadow-lg border border-white/50">
+                    <h4 class="font-semibold text-slate-700">
+                        {{ $sensor->location }}
+                    </h4>
+                    <p class="mt-2 text-sm text-slate-600">
+                        Water Level:
+                        <span class="font-bold text-slate-800">
+                            {{ $sensor->water_level }} m
+                        </span>
+                    </p>
                 </div>
             @endforeach
         </div>
     </div>
 
-    <!-- User Reports -->
+    <!-- ================= USER REPORTS ================= -->
     <div>
-        <h3 class="text-xl font-semibold mb-4">User Reports</h3>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
-                <thead class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+        <div class="mb-6 flex items-center gap-3
+                    bg-white/60 backdrop-blur
+                    order-l-6 border-rose-500
+                    rounded-xl px-5 py-3 shadow">
+            <h3 class="text-2xl font-bold text-slate-900 tracking-wide">
+                User Flood Reports
+            </h3>
+        </div>
+
+
+        <div class="overflow-x-auto bg-white/90 backdrop-blur
+                    rounded-2xl shadow-xl border border-white/60">
+
+            <table class="min-w-full text-sm">
+                <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
                     <tr>
-                        <th class="py-3 px-6 text-left">Image</th>
-                        <th class="py-3 px-6 text-left">Location</th>
-                        <th class="py-3 px-6 text-left">Severity</th>
-                        <th class="py-3 px-6 text-left">Status</th>
-                        <th class="py-3 px-6 text-left">Actions</th>
+                        <th class="py-4 px-6 text-left">Image</th>
+                        <th class="py-4 px-6 text-left">Location</th>
+                        <th class="py-4 px-6 text-left">Severity</th>
+                        <th class="py-4 px-6 text-left">Status</th>
+                        <th class="py-4 px-6 text-left">Actions</th>
                     </tr>
                 </thead>
 
-                <tbody class="text-gray-700 text-sm">
+                <tbody class="divide-y">
                     @foreach ($reports as $report)
-                        <tr class="border-b border-gray-200 hover:bg-gray-50">
+                    <tr class="hover:bg-slate-50 transition">
 
-                            <!-- Image -->
-                            <td class="py-3 px-6">
-                                @if($report->image)
-                                    <img src="{{ asset('storage/' . $report->image) }}"
-                                        class="w-20 h-auto rounded cursor-pointer"
-                                        onclick="openImageModal('{{ asset('storage/' . $report->image) }}')">
-                                @else
-                                    <span class="text-gray-400 text-xs">No image</span>
-                                @endif
-                            </td>
+                        <!-- Image -->
+                        <td class="py-4 px-6">
+                            @if($report->image)
+                                <img src="{{ asset('storage/' . $report->image) }}"
+                                     class="w-20 rounded-lg cursor-pointer shadow"
+                                     onclick="openImageModal('{{ asset('storage/' . $report->image) }}')">
+                            @else
+                                <span class="text-slate-400 text-xs">No image</span>
+                            @endif
+                        </td>
 
-                            <!-- Location -->
-                            <td class="py-3 px-6">{{ $report->location }}</td>
+                        <td class="py-4 px-6">{{ $report->location }}</td>
+                        <td class="py-4 px-6 capitalize">{{ $report->severity }}</td>
 
-                            <!-- Severity -->
-                            <td class="py-3 px-6 capitalize">{{ $report->severity }}</td>
+                        <!-- Status -->
+                        <td class="py-4 px-6">
+                            @if ($report->status === 'approved')
+                                <span class="px-3 py-1 text-xs font-semibold
+                                             rounded-full bg-green-100 text-green-800">
+                                    Approved
+                                </span>
+                            @elseif ($report->status === 'pending')
+                                <span class="px-3 py-1 text-xs font-semibold
+                                             rounded-full bg-yellow-100 text-yellow-800">
+                                    Pending
+                                </span>
+                            @elseif ($report->status === 'cleared')
+                                <span class="px-3 py-1 text-xs font-semibold
+                                             rounded-full bg-slate-200 text-slate-700">
+                                    Cleared
+                                </span>
+                            @endif
+                        </td>
 
-                            <!-- Status -->
-                            <td class="py-3 px-6">
-                                @if ($report->status === 'approved')
-                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                        Approved
-                                    </span>
-                                @elseif ($report->status === 'pending')
-                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Pending
-                                    </span>
-                                @elseif ($report->status === 'cleared')
-                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full bg-gray-200 text-gray-600">
-                                        Cleared
-                                    </span>
-                                @endif
-                            </td>
-
-                            <!-- Actions -->
-                            <td class="py-3 px-6">
-                                <div class="flex flex-wrap gap-2">
+                        <!-- Actions -->
+                        <td class="py-4 px-6">
+                            <div class="flex flex-wrap gap-2">
 
                                 @if ($report->status === 'pending')
-                                    <form method="POST" action="/admin/reports/{{ $report->id }}/approve">
-                                        @csrf
-                                        <button type="submit" class="inline-flex items-center justify-center w-28 px-4 py-2 text-sm font-semibold text-white rounded"
-                                        style="background-color:#2563eb"
-                                        onmouseover="this.style.backgroundColor='#1d4ed8'"
-                                        onmouseout="this.style.backgroundColor='#2563eb'">
-                                            ✔️ Approve
-                                        </button>
-                                    </form>
+                                <form method="POST" action="/admin/reports/{{ $report->id }}/approve">
+                                    @csrf
+                                    <button class="px-4 py-2 rounded-lg
+                                                   bg-blue-600 hover:bg-blue-700
+                                                   text-white text-xs font-semibold">
+                                        ✔ Approve
+                                    </button>
+                                </form>
                                 @endif
 
                                 @if ($report->status === 'approved')
-                                    <form method="POST" action="/admin/reports/{{ $report->id }}/clear">
-                                        @csrf
-                                        <button type="submit" class="inline-flex items-center justify-center w-28 px-4 py-2 text-sm font-semibold text-white rounded"
-                                        style="background-color:#f59e0b"
-                                        onmouseover="this.style.backgroundColor='#d97706'"
-                                        onmouseout="this.style.backgroundColor='#f59e0b'">
-                                            🧹 Clear
-                                        </button>
-                                    </form>
+                                <form method="POST" action="/admin/reports/{{ $report->id }}/clear">
+                                    @csrf
+                                    <button class="px-4 py-2 rounded-lg
+                                                   bg-yellow-500 hover:bg-yellow-600
+                                                   text-white text-xs font-semibold">
+                                        🧹 Clear
+                                    </button>
+                                </form>
                                 @endif
 
                                 <form method="POST" action="/admin/reports/{{ $report->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="inline-flex items-center justify-center w-28 px-4 py-2 text-sm font-semibold text-white rounded"
-                                    style="background-color:#dc2626"
-                                    onmouseover="this.style.backgroundColor='#b91c1c'"
-                                    onmouseout="this.style.backgroundColor='#dc2626'">
+                                    <button class="px-4 py-2 rounded-lg
+                                                   bg-red-600 hover:bg-red-700
+                                                   text-white text-xs font-semibold">
                                         ❌ Delete
                                     </button>
                                 </form>
 
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -173,13 +208,14 @@
 </div>
 </div>
 
-
-<!-- Image Preview Modal -->
+<!-- ================= IMAGE MODAL ================= -->
 <div id="image-modal"
-     class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50">
+     class="fixed inset-0 hidden items-center justify-center
+            bg-black/80 z-50">
 
-    <img id="image-modal-img" src="" class="max-w-3xl max-h-[90vh] rounded-lg shadow-lg">
-
+    <img id="image-modal-img"
+         class="max-w-3xl max-h-[90vh]
+                rounded-xl shadow-2xl">
 </div>
 
 <script>
@@ -187,12 +223,8 @@ function openImageModal(src) {
     document.getElementById('image-modal-img').src = src;
     document.getElementById('image-modal').style.display = 'flex';
 }
-
-document.getElementById('image-modal').addEventListener('click', function() {
+document.getElementById('image-modal').addEventListener('click', function () {
     this.style.display = 'none';
 });
 </script>
-
-
 @endsection
-
