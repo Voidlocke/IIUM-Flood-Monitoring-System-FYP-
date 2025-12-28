@@ -5,7 +5,6 @@
     <div class="max-w-4xl mx-auto px-6 py-10">
 
         <div class="mb-6 flex items-center gap-4 bg-white/70 backdrop-blur border-l-6 border-emerald-500 rounded-2xl px-6 py-4 shadow-lg">
-            <span class="text-3xl">📡</span>
             <h2 class="text-3xl font-extrabold tracking-wide text-slate-900">Add Sensor</h2>
         </div>
 
@@ -28,10 +27,22 @@
                 <div id="map" class="h-[420px] rounded-xl border border-slate-200 mb-6"></div>
 
                 <button type="submit"
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-full shadow-lg">
+                        class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-full shadow-lg">
                     ➕ Add Sensor
                 </button>
             </form>
+        </div>
+
+        {{-- Optional Back button --}}
+        <div class="mt-5 flex justify-start">
+            <a href="/admin/dashboard"
+               class="inline-flex items-center gap-2 px-5 py-2.5
+                      bg-blue-600 hover:bg-blue-700
+                      text-white rounded-xl shadow
+                      font-semibold
+                      transition">
+                ⬅️ Back to Dashboard
+            </a>
         </div>
 
     </div>

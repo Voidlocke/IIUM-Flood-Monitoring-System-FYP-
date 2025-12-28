@@ -13,7 +13,7 @@ class MapController extends Controller
     }
 
     public function floodData() {
-        $sensors = SensorData::all();
+        $sensors = SensorData::where('is_active', 1)->get();
         $users = UserReport::where('status', 'approved')->get();
 
         return response()->json([

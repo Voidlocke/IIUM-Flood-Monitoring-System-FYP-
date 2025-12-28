@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\SensorData;
+use App\Models\SensorReading;
 
 class FluctuateSensors extends Command
 {
@@ -63,9 +64,16 @@ class FluctuateSensors extends Command
 
             $sensor->water_level = $new;
             $sensor->save();
+
+            // ✅ SAVE HISTORY (THIS IS THE KEY)
+            SensorReading::create([
+                'sensor_data_id' => $sensor->id,
+                'water_level'    => $new,
+            ]);
         }
 
         $this->info("Updated {$sensors->count()} sensors.");
         return self::SUCCESS;
+
     }
 }

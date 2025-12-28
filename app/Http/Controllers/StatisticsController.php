@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserReport;
 use App\Models\SensorData;
+use App\Models\SensorReading;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -59,12 +60,11 @@ class StatisticsController extends Controller
         ];
 
         // 3. Sensor water-level time series (based on the filter range)
-        $sensorData = SensorData::where('is_active', true)
-            ->selectRaw('DATE(created_at) as date, AVG(water_level) as avg_level')
-            ->where('created_at', '>=', $dateFrom)
-            ->groupBy('date')
-            ->orderBy('date', 'asc')
-            ->get();
+        $sensorData = SensorReading::where('created_at', '>=', $dateFrom)
+        ->selectRaw('DATE(created_at) as date, AVG(water_level) as avg_level')
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
 
 
         return view('statistics', [

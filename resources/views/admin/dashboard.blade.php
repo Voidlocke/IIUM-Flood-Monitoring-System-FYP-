@@ -19,21 +19,32 @@
             </h2>
         </div>
 
-        <a href="/admin/users/create"
-           class="inline-flex items-center gap-2
-                  bg-slate-800 hover:bg-slate-900
-                  text-white px-5 py-3 rounded-xl
-                  shadow-lg text-sm font-semibold">
-            ➕ Create Admin
-        </a>
-
-        <a href="/admin/sensors/create"
+        <!-- ACTION BUTTONS -->
+        <div class="flex items-center gap-3">
+            <!-- Create Admin -->
+            <a href="/admin/users/create"
             class="inline-flex items-center gap-2
-            bg-emerald-600 hover:bg-emerald-700
-            text-white px-5 py-3 rounded-xl
-            shadow-lg text-sm font-semibold">
-            ➕ Add Sensor
-        </a>
+                    bg-gradient-to-r from-indigo-600 to-blue-600
+                    hover:from-indigo-600 hover:to-blue-700
+                    text-white px-5 py-3 rounded-xl
+                    shadow-lg shadow-blue-500/30
+                    text-sm font-semibold
+                    transition transform hover:-translate-y-0.5">
+                ➕ Create Admin
+            </a>
+
+            <!-- Add Sensor (more vibrant) -->
+            <a href="/admin/sensors/create"
+            class="inline-flex items-center gap-2
+                    bg-gradient-to-r from-emerald-500 to-green-600
+                    hover:from-emerald-600 hover:to-green-700
+                    text-white px-6 py-3 rounded-xl
+                    shadow-xl shadow-emerald-500/30
+                    text-sm font-bold
+                    transition transform hover:-translate-y-0.5">
+                ➕ Add Sensor
+            </a>
+        </div>
     </div>
 
     <!-- ================= FILTERS ================= -->

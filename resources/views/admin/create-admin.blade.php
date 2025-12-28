@@ -102,7 +102,7 @@
                       text-white rounded-xl shadow
                       font-semibold
                       transition">
-                Back to Dashboard
+                ⬅️ Back to Dashboard
             </a>
         </div>
 
