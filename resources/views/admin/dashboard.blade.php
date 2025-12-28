@@ -26,6 +26,14 @@
                   shadow-lg text-sm font-semibold">
             ➕ Create Admin
         </a>
+
+        <a href="/admin/sensors/create"
+            class="inline-flex items-center gap-2
+            bg-emerald-600 hover:bg-emerald-700
+            text-white px-5 py-3 rounded-xl
+            shadow-lg text-sm font-semibold">
+            ➕ Add Sensor
+        </a>
     </div>
 
     <!-- ================= FILTERS ================= -->
@@ -65,35 +73,6 @@
                 : 'bg-slate-200 text-slate-700 hover:bg-slate-300' }}">
             Resolved
         </a>
-    </div>
-
-    <!-- ================= SENSOR DATA ================= -->
-    <div class="mb-12">
-        <div class="mb-6 flex items-center gap-3
-                    bg-white/60 backdrop-blur
-                    border-l-6 border-emerald-500
-                    rounded-xl px-5 py-3 shadow">
-            <h3 class="text-2xl font-bold text-slate-900 tracking-wide">
-                Sensor Data
-            </h3>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-            @foreach ($sensors as $sensor)
-                <div class="bg-white/80 backdrop-blur
-                            rounded-2xl p-5 shadow-lg border border-white/50">
-                    <h4 class="font-semibold text-slate-700">
-                        {{ $sensor->location }}
-                    </h4>
-                    <p class="mt-2 text-sm text-slate-600">
-                        Water Level:
-                        <span class="font-bold text-slate-800">
-                            {{ $sensor->water_level }} m
-                        </span>
-                    </p>
-                </div>
-            @endforeach
-        </div>
     </div>
 
     <!-- ================= USER REPORTS ================= -->
@@ -203,6 +182,52 @@
                 </tbody>
             </table>
 
+        </div>
+    </div>
+
+    <!-- ================= SENSOR DATA ================= -->
+    <div class="mb-12">
+        <div class="mb-6 flex items-center gap-3
+                    bg-white/60 backdrop-blur
+                    border-l-6 border-emerald-500
+                    rounded-xl px-5 py-3 shadow">
+            <h3 class="text-2xl font-bold text-slate-900 tracking-wide">
+                Sensor Data
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            @foreach ($sensors as $sensor)
+                <div class="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-lg border border-white/50">
+                    <div class="flex items-start justify-between gap-3">
+                        <h4 class="font-semibold text-slate-700">
+                            {{ $sensor->location }}
+                        </h4>
+
+                        {{-- ADMIN ONLY badge --}}
+                        <span class="px-3 py-1 text-xs font-bold rounded-full
+                            {{ $sensor->is_active ? 'bg-green-100 text-green-800' : 'bg-slate-200 text-slate-700' }}">
+                            {{ $sensor->is_active ? 'Active' : 'Inactive' }}
+                        </span>
+                    </div>
+
+                    <p class="mt-2 text-sm text-slate-600">
+                        Water Level:
+                        <span class="font-bold text-slate-800">
+                            {{ number_format($sensor->water_level / 100, 2) }} m
+                        </span>
+                    </p>
+
+                    {{-- Toggle --}}
+                    <form method="POST" action="/admin/sensors/{{ $sensor->id }}/toggle" class="mt-3">
+                        @csrf
+                        <button class="px-4 py-2 rounded-lg text-xs font-semibold
+                            {{ $sensor->is_active ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white' }}">
+                            {{ $sensor->is_active ? 'Deactivate' : 'Activate' }}
+                        </button>
+                    </form>
+                </div>
+            @endforeach
         </div>
     </div>
 </div>

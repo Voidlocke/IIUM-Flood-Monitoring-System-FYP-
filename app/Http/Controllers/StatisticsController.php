@@ -43,37 +43,35 @@ class StatisticsController extends Controller
             ->get();
 
         // Sensor summary
-        $sensorCount = SensorData::count();
-        $highWaterSensors = SensorData::where('water_level', '>', 20)->count();
+        $activeSensors = SensorData::where('is_active', true);
+
+        $sensorCount = (clone $activeSensors)->count();
 
         // 1. Get latest sensor data for display
-        $latestSensorData = SensorData::orderBy('created_at', 'desc')->get();
+        $latestSensorData = (clone $activeSensors)->orderBy('created_at', 'desc')->get();
 
         // 2. Compute water level ranges
         $sensorSeverityCounts = [
-            'low' => SensorData::where('water_level', '<=', 0.20)->count(),
-            'moderate' => SensorData::whereBetween('water_level', [0.21, 0.50])->count(),
-            'high' => SensorData::whereBetween('water_level', [0.51, 1.00])->count(),
-            'severe' => SensorData::where('water_level', '>', 1.00)->count(),
+            'low' => SensorData::where('water_level', '<=', 20)->count(),
+            'moderate' => SensorData::whereBetween('water_level', [21, 50])->count(),
+            'high' => SensorData::whereBetween('water_level', [51, 100])->count(),
+            'severe' => SensorData::where('water_level', '>', 100)->count(),
         ];
 
         // 3. Sensor water-level time series (based on the filter range)
-        $sensorData = SensorData::selectRaw('DATE(created_at) as date, AVG(water_level) as avg_level')
-            ->when($range == '7d', fn($q) => $q->where('created_at', '>=', now()->subDays(7)))
-            ->when($range == '1m', fn($q) => $q->where('created_at', '>=', now()->subMonth()))
-            ->when($range == '6m', fn($q) => $q->where('created_at', '>=', now()->subMonths(6)))
-            ->when($range == '1y', fn($q) => $q->where('created_at', '>=', now()->subYear()))
-            ->when($range == '5y', fn($q) => $q->where('created_at', '>=', now()->subYears(5)))
+        $sensorData = SensorData::where('is_active', true)
+            ->selectRaw('DATE(created_at) as date, AVG(water_level) as avg_level')
+            ->where('created_at', '>=', $dateFrom)
             ->groupBy('date')
             ->orderBy('date', 'asc')
             ->get();
+
 
         return view('statistics', [
             'totalReports'      => $totalReports,
             'severityCounts'    => $severityCounts,
             'reports'           => $reports,
             'sensorCount'       => $sensorCount,
-            'highWaterSensors'  => $highWaterSensors,
             'range'             => $range,
 
             // NEW SENSOR DATA

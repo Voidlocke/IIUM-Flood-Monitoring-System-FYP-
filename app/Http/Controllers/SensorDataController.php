@@ -3,45 +3,100 @@
 namespace App\Http\Controllers;
 
 use App\Models\SensorData;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FloodAlertMail;
+use Illuminate\Support\Facades\Cache;
 
 class SensorDataController extends Controller
 {
     public function index()
     {
-        $sensors = SensorData::all();
+        $sensors = SensorData::where('is_active', 1)->get();
 
-        foreach ($sensors as $sensor) {
+    }
 
-            $waterLevel = floatval($sensor->water_level) / 100; // converts cm → meters
+    public function create()
+    {
+        return view('admin.sensors.create');
+    }
 
-            // If water level passes 0.20m and alert not sent yet
-            if ($waterLevel > 0.20 && !$sensor->alert_sent) {
+    public function store(Request $request)
+    {
+        $request->validate([
+            'location' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
 
-                $message = "⚠️ Sensor Flood Warning\n\n" .
-                           "Sensor Location: {$sensor->location}\n" .
-                           "Water Level: {$waterLevel}m\n" .
-                           "Threshold: 0.20m";
+        SensorData::create([
+            'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'water_level' => 0,
+            'alert_sent' => 0,
+            'is_active' => 1,
+        ]);
 
-                // Email all users
-                foreach (\App\Models\User::all() as $user) {
-                    Mail::to($user->email)->send(new FloodAlertMail($message));
-                }
+        return redirect()->route('admin.dashboard')->with('success', 'Sensor added successfully.');
+    }
 
-                // Prevent spam — mark alert sent
-                $sensor->alert_sent = true;
-                $sensor->save();
+    public function toggle($id)
+    {
+        $sensor = SensorData::findOrFail($id);
+        $sensor->is_active = !$sensor->is_active;
+        $sensor->save();
+
+        return back()->with('success', 'Sensor status updated.');
+    }
+
+    public function checkAlerts()
+    {
+        $DANGER_LEVEL = 30; // cm
+        $SAFE_LEVEL   = 20; // cm
+
+        $sensors = SensorData::where('is_active', 1)->get();
+
+        //  GLOBAL STATE: has any alert already been sent?
+        $globalAlertSent = SensorData::where('alert_sent', 1)->exists();
+
+        //  CHECK IF ANY SENSOR IS DANGEROUS
+        $dangerSensors = $sensors->filter(fn ($s) => $s->water_level >= $DANGER_LEVEL);
+
+        //  SEND ONE EMAIL ONLY
+        if ($dangerSensors->count() > 0 && !$globalAlertSent) {
+
+            $message = "⚠️ FLOOD ALERT\n\n";
+
+            foreach ($dangerSensors as $sensor) {
+                $message .=
+                    "Location: {$sensor->location}\n"
+                . "Water Level: {$sensor->water_level} cm\n\n";
             }
 
-            // Reset alert when level drops (optional)
-            if ($sensor->alert_sent && $waterLevel <= 0.20) {
-                $sensor->alert_sent = false;
-                $sensor->save();
+            $users = User::where('receive_flood_alerts', true)->get();
+
+            foreach ($users as $user) {
+                Mail::to($user->email)->send(new FloodAlertMail($message));
             }
+
+            // LOCK THE SYSTEM (PREVENT SPAM)
+            SensorData::query()->update(['alert_sent' => 1]);
+
+            return response()->json(['status' => 'alert_sent']);
         }
 
-        return SensorData::latest()->take(10)->get();
-    }
+        // RESET ONLY WHEN ALL SENSORS ARE SAFE
+        $allSafe = $sensors->every(fn ($s) => $s->water_level < $SAFE_LEVEL);
+
+        if ($allSafe && $globalAlertSent) {
+            SensorData::query()->update(['alert_sent' => 0]);
+            return response()->json(['status' => 'alert_reset']);
+        }
+
+        return response()->json(['status' => 'no_change']);
+}
+
+
 }

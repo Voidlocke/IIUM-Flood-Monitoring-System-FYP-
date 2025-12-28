@@ -6,5 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class SensorData extends Model
 {
-    //
+    protected $table = 'sensor_data';
+
+    protected $fillable = [
+        'location',
+        'water_level',
+        'latitude',
+        'longitude',
+        'alert_sent',
+        'is_active',
+    ];
 }

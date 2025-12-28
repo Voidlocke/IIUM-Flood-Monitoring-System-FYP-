@@ -359,5 +359,12 @@ document.getElementById('imageModal').addEventListener('click', () => {
 });
 </script>
 
+<script>
+setInterval(() => {
+    fetch('/api/check-flood-alerts');
+}, 60000); // every 60 seconds
+</script>
+
+
 </body>
 </html>

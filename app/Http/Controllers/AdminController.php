@@ -35,7 +35,7 @@ class AdminController extends Controller
         $reports = $query->get();
 
         // Fetch sensor data
-        $sensors = SensorData::all();
+        $sensors = SensorData::orderBy('created_at', 'desc')->get();
 
         return view('admin.dashboard', compact('sensors', 'reports', 'filter'));
     }

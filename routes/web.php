@@ -32,6 +32,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/reports/{id}', [AdminController::class, 'destroy']);
     Route::get('/admin/users/create', [AdminUserController::class, 'create']);
     Route::post('/admin/users/store', [AdminUserController::class, 'store']);
+    Route::get('/admin/sensors/create', [SensorDataController::class, 'create']);
+    Route::post('/admin/sensors', [SensorDataController::class, 'store']);
+    Route::post('/admin/sensors/{id}/toggle', [SensorDataController::class, 'toggle']);
 });
 
 Route::get('/admin', function () {
@@ -45,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/report', [UserReportController::class, 'store']);
 });
 Route::get('/api/sensors', [SensorDataController::class, 'index']);
+Route::get('/api/check-flood-alerts', [SensorDataController::class, 'checkAlerts']);
 
 
 Route::get('/redirect-after-login', function () {
