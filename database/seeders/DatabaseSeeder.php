@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SensorDataSeeder::class,
             UserReportSeeder::class,
+            SensorReadingsSeeder::class,
+            UserReportsSeeder::class,
         ]);
     }
 }
